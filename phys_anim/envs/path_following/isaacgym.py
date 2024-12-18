@@ -39,11 +39,6 @@ class PathFollowingHumanoid(BasePathFollowing, TaskHumanoid):  # type: ignore[mi
     def __init__(self, config, device: torch.device):
         super().__init__(config=config, device=device)
 
-        if "smpl" in self.config.robot.asset.asset_file_name:
-            self.head_body_id = self.build_body_ids_tensor(["Head"]).item()
-        else:
-            self.head_body_id = self.build_body_ids_tensor(["head"]).item()
-
         if not self.headless:
             self._build_marker_state_tensors()
 
@@ -124,7 +119,7 @@ class PathFollowingHumanoid(BasePathFollowing, TaskHumanoid):  # type: ignore[mi
         if not self.config.path_follower_params.height_conditioned:
             self._marker_pos[..., 2] = 0.8  # CT hack
 
-        ground_below_marker = self.get_ground_heights(
+        ground_below_marker = self.terrain_obs_cb.get_ground_heights(
             traj_samples[..., :2].view(-1, 2)
         ).view(traj_samples.shape[:-1])
 
@@ -147,7 +142,7 @@ class PathFollowingHumanoid(BasePathFollowing, TaskHumanoid):  # type: ignore[mi
             if not self.config.path_follower_params.height_conditioned:
                 verts[..., 2] = self.humanoid_root_states[i, 2]  # ZL Hack
             else:
-                verts[..., 2] += self.get_ground_heights(self.humanoid_root_states[i, :2].view(1, 2)).view(-1)
+                verts[..., 2] += self.terrain_obs_cb.ground_heights[i].view(-1)
             lines = torch.cat([verts[:-1], verts[1:]], dim=-1).cpu().numpy()
             curr_cols = np.broadcast_to(cols, [lines.shape[0], cols.shape[-1]])
             self.gym.add_lines(self.viewer, env_ptr, lines.shape[0], lines, curr_cols)
