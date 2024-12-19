@@ -9,7 +9,7 @@ motion_file=data/motions/smpl_humanoid_walk.npy \
 # smpl path follower
 CUDA_VISIBLE_DEVICES=3 python phys_anim/train_agent.py \
 +exp=path_follower \
-experiment_name=new_amp_smpl_path_follower_gym_3072 \
+experiment_name=fixed_amp_smpl_path_follower_gym_3072 \
 +robot=smpl \
 motion_file=data/motions/smpl_humanoid_walk.npy \
 +backbone=isaacgym +opt=wandb num_envs=3072
@@ -17,7 +17,7 @@ motion_file=data/motions/smpl_humanoid_walk.npy \
 # smpl path following
 CUDA_VISIBLE_DEVICES=4 python phys_anim/train_agent.py \
 +exp=steering \
-experiment_name=new_amp_smpl_steering_gym_3072 \
+experiment_name=fixed_amp_smpl_steering_gym_3072 \
 +robot=smpl \
 motion_file=data/motions/smpl_humanoid_walk.npy \
 +backbone=isaacgym +opt=wandb num_envs=3072
