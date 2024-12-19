@@ -1,1 +1,0 @@
-python phys_anim/train_agent.py +exp=amp motion_file=phys_anim/data/motions/amp_humanoid_walk.npy +robot=amp +backbone=isaacsim +opt=wdb
